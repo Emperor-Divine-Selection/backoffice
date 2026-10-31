@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { computed, h, onMounted, ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import { useMessage } from 'naive-ui';
+import { NIcon, useMessage } from 'naive-ui';
 import type { DropdownOption, MenuOption } from 'naive-ui'
+import { DocumentTextOutline, LogOutOutline, StorefrontOutline } from '@vicons/ionicons5'
 import { request } from '@/api/http';
 import { clearToken } from '@/api/token';
 import {
@@ -34,6 +35,7 @@ const message = useMessage()
 const menuOptions: MenuOption[] = [
     {
         key: 'applications',
+        icon: () => h(NIcon, { size: 16 }, { default: () => h(DocumentTextOutline) }),
         label: () => h(RouterLink, { to: { name: 'applications' } }, { default: () => '商户申请' })
     },
 ]
@@ -88,26 +90,46 @@ onMounted(async () => {
 
 <template>
     <n-layout has-sider class="h-dvh">
-        <n-layout-sider width="300" bordered>
-            <div class='px-5 py-4 text-base font-semibold text-center'>RuneShop</div>
-            <n-menu :value="String(route.name ?? '')" :options="menuOptions"></n-menu>
+        <n-layout-sider width="216" :bordered="false" :native-scrollbar="false"
+            content-style="height: 100%; display: flex; flex-direction: column; background: #0f172a">
+            <div class="flex h-14 shrink-0 items-center gap-2 border-b border-white/6 px-4">
+                <n-icon :size="18" color="#60a5fa">
+                    <StorefrontOutline />
+                </n-icon>
+                <span class="text-sm font-semibold tracking-wide text-white">RuneShop</span>
+            </div>
+
+            <n-menu class="flex-1 px-2 py-2" :value="String(route.name ?? '')" :options="menuOptions" />
+
+            <div class="mt-auto shrink-0 border-t border-white/6 p-2">
+                <n-dropdown trigger="click" placement="top-start" :options="userMenuOptions"
+                    @select="handleUserMenuSelect">
+                    <div
+                        class="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 transition-colors hover:bg-white/5">
+                        <n-avatar round :size="26" class="bg-blue-600 text-[11px]">{{ avatarText }}</n-avatar>
+                        <span class="min-w-0 flex-1 truncate text-[13px] text-slate-300">{{ username }}</span>
+                        <n-icon :component="LogOutOutline" :size="15" class="text-slate-500" />
+                    </div>
+                </n-dropdown>
+            </div>
         </n-layout-sider>
 
         <n-layout>
-            <n-layout-header bordered class='flex h-14 items-center justify-between px-6'>
-                <n-breadcrumb>
-                    <n-breadcrumb-item>运营后台</n-breadcrumb-item>
-                    <n-breadcrumb-item v-if="currentTitle">{{ currentTitle }}</n-breadcrumb-item>
-                </n-breadcrumb>
-                <n-dropdown trigger="click" :options="userMenuOptions" @select="handleUserMenuSelect">
-                    <div class='flex cursor-pointer items-center gap-2'>
-                        <span class='text-sm text-gray-600'>{{ username }}</span>
-                        <n-avatar round size="small">{{ avatarText }}</n-avatar>
-                    </div>
-                </n-dropdown>
+            <n-layout-header :bordered="false"
+                style="height: 56px; background: #ffffff; border-bottom: 1px solid #eef0f3">
+                <div class="flex h-full items-center justify-between px-6">
+                    <n-breadcrumb>
+                        <n-breadcrumb-item>
+                            <span class="text-[13px] text-gray-400">运营后台</span>
+                        </n-breadcrumb-item>
+                        <n-breadcrumb-item v-if="currentTitle">
+                            <span class="text-[13px] text-gray-700">{{ currentTitle }}</span>
+                        </n-breadcrumb-item>
+                    </n-breadcrumb>
+                </div>
             </n-layout-header>
 
-            <n-layout-content class='bg-gray-50 p-6' :native-scrollbar="false">
+            <n-layout-content content-style="background: #f6f7f9; padding: 24px" :native-scrollbar="false">
                 <router-view></router-view>
             </n-layout-content>
         </n-layout>
