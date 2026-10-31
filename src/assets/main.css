@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* 关掉浏览器自动填充的底色（Chrome 会给填过的输入框刷一层浅蓝） */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    -webkit-text-fill-color: #1f2937 !important;
+    transition: background-color 9999s ease-in-out 0s;
+}

@@ -3,7 +3,7 @@ import { computed, h, onMounted, ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { NIcon, useMessage } from 'naive-ui';
 import type { DropdownOption, MenuOption } from 'naive-ui'
-import { DocumentTextOutline, LogOutOutline, StorefrontOutline } from '@vicons/ionicons5'
+import { DocumentTextOutline, StorefrontOutline } from '@vicons/ionicons5'
 import { request } from '@/api/http';
 import { clearToken } from '@/api/token';
 import {
@@ -100,18 +100,6 @@ onMounted(async () => {
             </div>
 
             <n-menu class="flex-1 px-2 py-2" :value="String(route.name ?? '')" :options="menuOptions" />
-
-            <div class="mt-auto shrink-0 border-t border-white/6 p-2">
-                <n-dropdown trigger="click" placement="top-start" :options="userMenuOptions"
-                    @select="handleUserMenuSelect">
-                    <div
-                        class="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 transition-colors hover:bg-white/5">
-                        <n-avatar round :size="26" class="bg-blue-600 text-[11px]">{{ avatarText }}</n-avatar>
-                        <span class="min-w-0 flex-1 truncate text-[13px] text-slate-300">{{ username }}</span>
-                        <n-icon :component="LogOutOutline" :size="15" class="text-slate-500" />
-                    </div>
-                </n-dropdown>
-            </div>
         </n-layout-sider>
 
         <n-layout>
@@ -126,6 +114,14 @@ onMounted(async () => {
                             <span class="text-[13px] text-gray-700">{{ currentTitle }}</span>
                         </n-breadcrumb-item>
                     </n-breadcrumb>
+
+                    <n-dropdown trigger="click" :options="userMenuOptions" @select="handleUserMenuSelect">
+                        <div
+                            class="flex cursor-pointer items-center gap-2 rounded-md py-1 pl-2 pr-1 transition-colors hover:bg-gray-50">
+                            <span class="text-[13px] text-gray-600">{{ username }}</span>
+                            <n-avatar round :size="26" class="bg-blue-600 text-[11px]">{{ avatarText }}</n-avatar>
+                        </div>
+                    </n-dropdown>
                 </div>
             </n-layout-header>
 
